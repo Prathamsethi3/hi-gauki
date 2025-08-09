@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Special Date Invite</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  .screen {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    animation: pop 0.6s ease;
+  }
+  .active {
+    display: flex;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  button:hover {
+    transform: scale(1.1);
+  }
+  .heart {
+    position: absolute;
+    font-size: 30px;
+    cursor: pointer;
+    animation: float 1s ease;
+  }
+  @keyframes float {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+<div id="welcome" class="screen active" style="background-image: url('data:image/jpeg;base64,PUT_BASE64_IMAGE3');">
+  <h1>Welcome Gauki ❤️</h1>
+  <p>I have something special for you...</p>
+  <button onclick="nextScreen('heartGame')">Click Me</button>
+</div>
+
+<div id="heartGame" class="screen" style="background-image: url('data:image/jpeg;base64,PUT_BASE64_IMAGE1');">
+  <h1>Click 10 Hearts to Win ❤️</h1>
+  <div id="heartContainer"></div>
+</div>
+
+<div id="congrats" class="screen" style="background: pink;">
+  <h1>Congratulations! 🎉</h1>
+  <button onclick="nextScreen('finalQuestion')">Next</button>
+</div>
+
+<div id="finalQuestion" class="screen" style="background: lightblue;">
+  <h1>Hi Gauki, I have something extremely serious to ask you...</h1>
+  <p>Will you go on a date with me? 🥺</p>
+  <button onclick="yesAnswer()">Yes</button>
+  <button id="noBtn" onmouseover="runAway()">No</button>
+</div>
+
+<div id="yay" class="screen" style="background-image: url('data:image/jpeg;base64,PUT_BASE64_IMAGE2');">
+  <h1>Yayyyyy ❤️🎉✨</h1>
+</div>
+
+<script>
+let heartCount = 0;
+function nextScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id === 'heartGame') startHeartGame();
+}
+function startHeartGame() {
+  const container = document.getElementById('heartContainer');
+  const gameInterval = setInterval(() => {
+    const heart = document.createElement('div');
+    heart.innerHTML = '❤️';
+    heart.className = 'heart';
+    heart.style.left = Math.random()*90 + '%';
+    heart.style.top = Math.random()*80 + '%';
+    heart.onclick = () => {
+      heart.remove();
+      heartCount++;
+      if(heartCount >= 10){
+        clearInterval(gameInterval);
+        nextScreen('congrats');
+      }
+    }
+    container.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }, 500);
+}
+function yesAnswer(){
+  nextScreen('yay');
+  // Add confetti effect here if desired
+}
+function runAway(){
+  const btn = document.getElementById('noBtn');
+  btn.style.position = 'absolute';
+  btn.style.left = Math.random()*80 + '%';
+  btn.style.top = Math.random()*80 + '%';
+}
+</script>
+</body>
+</html>
